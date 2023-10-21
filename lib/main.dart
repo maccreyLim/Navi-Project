@@ -15,6 +15,7 @@ void main() async {
   );
   await initializeDateFormatting();
   // Intl.defaultLocale = 'ko_KR'; // 한국어 로컬 설정
+
   runApp(const MyApp());
 }
 

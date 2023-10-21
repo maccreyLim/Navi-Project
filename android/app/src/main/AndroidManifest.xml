@@ -1,4 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+//디바이스가 부팅이 완료된 후에 브로드캐스트 이벤트를 수신하도록 하는 권한 	
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+//VIBRATE: 알림이 발생할 때 진동 기능을 사용할 수 있도록 허용합니다.
+  <uses-permission android:name="android.permission.VIBRATE" />
+//WAKE_LOCK: 알림이 발생했을 때 기기가 슬립 상태에서 깨어날 수 있도록 허용합니다.
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+//앱이 푸시 알림을 사용자에게 전달할 때 더 나은 사용자 경험을 제공
+  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <application
         android:label="navi_project"
         android:name="${applicationName}"
