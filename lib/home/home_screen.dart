@@ -74,15 +74,15 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             UserAccountsDrawerHeader(
               currentAccountPicture: Obx(() {
-                if (controller.userData['photoUrl'] == "") {
+                final photoUrl = controller.userData['photoUrl'];
+                if (photoUrl == null || photoUrl.isEmpty) {
                   return const CircleAvatar(
                     backgroundImage:
                         AssetImage('assets/images/navi_logo_text.png'),
                   );
                 } else {
                   return CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(controller.userData['photoUrl']),
+                    backgroundImage: NetworkImage(photoUrl),
                     maxRadius: 30,
                   );
                 }
