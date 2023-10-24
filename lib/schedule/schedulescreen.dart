@@ -57,7 +57,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text('일정을 입력해 주세요'),
+              title: const Text('일정을 입력해 주세요'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -65,7 +65,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     children: [
                       Text(
                         '${newTime.format(context)}',
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                       TextButton(
                         onPressed: () async {
@@ -80,13 +80,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             });
                           }
                         },
-                        child: Text('시간선택'),
+                        child: const Text('시간선택'),
                       ),
                     ],
                   ),
                   TextFormField(
                     controller: scheduleController,
-                    decoration: InputDecoration(labelText: 'Schedule'),
+                    decoration: const InputDecoration(labelText: 'Schedule'),
                   ),
                   ElevatedButton(
                     onPressed: () async {
@@ -104,9 +104,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       );
                       final service = ScheduleFirestore();
                       await service.addSchedule(schedule);
-                      Navigator.of(context).pop();
+                      // 현재 페이지를 닫고 이전 페이지로 이동
+                      Get.back();
                     },
-                    child: Text('저장'),
+                    child: const Text('저장'),
                   ),
                 ],
               ),
@@ -128,7 +129,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Schedule"),
+        title: const Text("Schedule"),
         actions: [
           IconButton(
             onPressed: () async {
@@ -140,7 +141,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 // }
               });
             },
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             iconSize: 25,
           ),
         ],
@@ -175,26 +176,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ScheduleList(
             scheduleStream: scheduleFirestore.getScheduleList(),
             selectedDay: selectedDay, // 선택된 날짜 전달
-          ), //스케쥴이 존재하면 스케쥴을 뿌려줌
-
-          // Positioned(
-          //   bottom: 0,
-          //   left: 10,
-          //   child: Container(
-          //     child: FloatingActionButton(
-          //       onPressed: () async {
-          //         _showScheduleDialog(context, (TimeOfDay updatedTime) {
-          //           // if (updatedTime != null) {
-          //           setState(() {
-          //             selectedTime = updatedTime;
-          //           });
-          //           // }
-          //         });
-          //       },
-          //       child: Icon(Icons.add),
-          //     ),
-          //   ),
-          // )
+          ),
         ],
       ),
     );

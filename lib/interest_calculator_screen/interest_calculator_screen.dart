@@ -1,182 +1,76 @@
-// import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-// class InterestCalculatorScreen extends StatefulWidget {
-//   const InterestCalculatorScreen({super.key});
+class InterestCalculatorScreen extends StatefulWidget {
+  const InterestCalculatorScreen({Key? key}) : super(key: key);
 
-//   @override
-//   State<InterestCalculatorScreen> createState() =>
-//       _InterestCalculatorScreenState();
-// }
+  @override
+  _InterestCalculatorScreenState createState() =>
+      _InterestCalculatorScreenState();
+}
 
-// class _InterestCalculatorScreenState extends State<InterestCalculatorScreen> {
-// // 원금, 1차 이자율, 2차 이자율, 계산된 이자, 합계를 저장할 변수
-//   late double principal; //원금
-//   late double interestRate1; //1차 이자율
-//   late double interestRate2; //2차 이자율
-//   double interestNun1 = 0; //1차이자금
-//   double interestNun2 = 0; //2차이자금
-//   double total = 0; //합계
+class _InterestCalculatorScreenState extends State<InterestCalculatorScreen> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController principalController = TextEditingController();
+  final f = NumberFormat.currency(locale: 'ko_KR', symbol: '₩');
+  int intValue = 0; // 클래스 수준에 변수 정의
 
-//   late DateTime startDateNun1; //1차개시날짜
-//   late DateTime startDateNun2; //2차개시날짜
-//   late DateTime endDateNun2; //만료날짜
-
-//       final DateTime? picked = await showDatePicker(
-//       context: context,
-//       initialDate: selectedDate,
-//       firstDate: DateTime(2000),
-//       lastDate: DateTime(2101),
-//     );
-
-//     if (picked != null) {
-//       setState(() {
-//         if (stage == 1) {
-//           startDateNun1 = picked;
-//         } else {
-//           // 다른 스테이지의 날짜 설정도 업데이트할 수 있습니다.
-//         }
-//       });
-//     }
-//   }
-
-//   void _selectEndDate(BuildContext context, int stage) async {
-//     late DateTime? selectedDate;
-//      DateFormat('yyyy-MM-dd').format(selectedDate);
-//     if (stage == 1) {
-//       selectedDate = endDateNun1 ?? DateTime.now();
-//     } else {
-//       // 다른 스테이지의 날짜 선택 기능도 추가할 수 있습니다.
-//     }
-
-//     final DateTime picked = await showDatePicker(
-//       context: context,
-//       initialDate: selectedDate,
-//       firstDate: DateTime(2000),
-//       lastDate: DateTime(2101),
-//     );
-
-//     if (picked != null) {
-//       setState(() {
-//         if (stage == 1) {
-//           endDateNun1 = picked;
-//         } else {
-//           // 다른 스테이지의 날짜 설정도 업데이트할 수 있습니다.
-//         }
-//       });
-//     }
-
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       resizeToAvoidBottomInset: false,
-//       appBar: AppBar(
-//         title: const Text('Interest Calculator'),
-//         actions: [
-//           IconButton(
-//             onPressed: () {},
-//             icon: const Icon(
-//               Icons.calculate,
-//             ),
-//             iconSize: 25,
-//           ),
-//         ],
-//       ),
-//       body: Column(
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: TextField(
-//               // 원금 입력
-//               decoration: InputDecoration(labelText: '원금'),
-//               keyboardType: TextInputType.number,
-//               onChanged: (value) {
-//                 principal = double.parse(value);
-//               },
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: TextField(
-//               // 1차 이자율 입력
-//               decoration: InputDecoration(labelText: '1차 이자율'),
-//               keyboardType: TextInputType.number,
-//               onChanged: (value) {
-//                 interestRate1 = double.parse(value);
-//               },
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: TextField(
-//               // 2차 이자율 입력
-//               decoration: InputDecoration(labelText: '2차 이자율'),
-//               keyboardType: TextInputType.number,
-//               onChanged: (value) {
-//                 interestRate2 = double.parse(value);
-//               },
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: TextField(
-//               // 개시 날짜 입력
-//               decoration: InputDecoration(labelText: '1차 개시 날짜'),
-//               keyboardType: TextInputType.datetime,
-//               readOnly: true, // 텍스트 필드를 편집 불가능하게 만듭니다.
-//               onTap: () {
-//                 _selectStartDate(context, 1); // 1차 개시 날짜 선택 다이얼로그를 엽니다.
-//               },
-//               controller: TextEditingController(
-//                 text: startDateNun1 == null
-//                     ? ''
-//                     : DateFormat('yyyy-MM-dd').format(startDateNun1),
-//               ),
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: TextField(
-//               // 만료 날짜 입력
-//               decoration: InputDecoration(labelText: '1차 만료 날짜'),
-//               keyboardType: TextInputType.datetime,
-//               readOnly: true, // 텍스트 필드를 편집 불가능하게 만듭니다.
-//               onTap: () {
-//                 _selectEndDate(context, 1); // 1차 만료 날짜 선택 다이얼로그를 엽니다.
-//               },
-//               controller: TextEditingController(
-//                 text: endDateNun1 == null
-//                     ? ''
-//                     : DateFormat('yyyy-MM-dd').format(endDateNun1),
-//               ),
-//             ),
-//           ),
-
-//           Text('1차이자: $interestNun1'), // 계산된 이자 표시
-//           Text('2차이자: $interestNun2'), // 계산된 이자 표시
-//           Text('합계: $total'), // 합계 표시
-//         ],
-//       ),
-//     );
-//   }
-
-//   void calculateInterest() {
-//     // TODO: 이자 계산 로직 구현
-//     // startDate와 endDate 간의 기간을 계산하세요.
-//     // 원금과 1차 이자율로 1차 이자를 계산하세요.
-//     // 2차 이자율을 적용하여 2차 이자를 계산하세요.
-//     // 계산된 이자와 원금을 합하여 total을 설정하세요.
-//     // 이자와 합계를 setState()를 사용하여 화면에 업데이트하세요.
-//   }
-//   void _selectStartDate(BuildContext context, int stage) async {
-//     late DateTime? selectedDate;
-//     DateFormat('yyyy-MM-dd').format(selectedDate);
-
-//     if (stage == 1) {
-//       selectedDate = startDateNun1 ?? DateTime.now();
-//     } else {
-//       // 다른 스테이지의 날짜 선택 기능도 추가할 수 있습니다.
-//     }
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Interest Calculator'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                controller: principalController,
+                decoration: const InputDecoration(
+                  labelText: '원금',
+                  hintText: '판결문에 인정된 원금을 입력해 주세요',
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '숫자를 입력해주세요';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  // 입력 값이 변경될 때마다 포맷팅하여 다시 설정
+                  if (value.isNotEmpty) {
+                    // 포맷된 값을 다시 입력 필드에 설정
+                    principalController.text = f.format(f.parse(value));
+                  }
+                },
+                onSaved: (value) {
+                  if (value != null && value.isNotEmpty) {
+                    final formattedValue = value.replaceAll(',', ''); // 콤마 제거
+                    final double doublevalue =
+                        double.parse(formattedValue); // 포맷된 문자열을 double로 파싱
+                    intValue = doublevalue.toInt(); // 클래스 수준 변수 업데이트
+                  }
+                },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    // 폼이 유효한 경우 계산 로직을 실행할 수 있음
+                    // principalController.text 및 interestRateController.text를 사용하여 계산
+                    // ...
+                    Text("정수값 : $intValue");
+                  }
+                },
+                child: const Text('Calculate'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

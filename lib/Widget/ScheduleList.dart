@@ -66,7 +66,7 @@ class ScheduleList extends StatelessWidget {
                     title: Text(
                       schedule.title,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                     ),
                     trailing: IconButton(
                       onPressed: () {

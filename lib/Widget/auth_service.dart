@@ -35,7 +35,7 @@ class AuthService {
         await _auth.signOut();
 
         // 로그인 화면으로 이동
-        Get.offAll(LoginScreen());
+        Get.offAll(const LoginScreen());
 
         // 이메일 인증 메시지 표시
         final userEmailAddress = userCredential.user!.email!;
@@ -50,7 +50,7 @@ class AuthService {
       } else {
         ShowToast("등록에 실패했습니다. 나중에 다시 시도해 주세요.", 1);
       }
-      Get.offAll(LoginScreen());
+      Get.offAll(const LoginScreen());
     }
 
     // 에러 발생 시 null 반환

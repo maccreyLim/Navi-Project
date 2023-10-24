@@ -1,17 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
 import 'package:navi_project/Widget/home_advertisement.dart';
 import 'package:navi_project/Widget/show_toast.dart';
-import 'package:navi_project/board/bored_screen.dart';
+import 'package:navi_project/board/post_screen.dart';
 import 'package:navi_project/home/log/login/log_in_screen.dart';
 import 'package:navi_project/home/setting/profileupdate_screen.dart';
 
 import 'package:navi_project/home/setting/setting_screen.dart';
+import 'package:navi_project/interest_calculator_screen/interest_calculator_screen.dart';
+import 'package:navi_project/model/post_model.dart';
 // import 'package:navi_project/interest_calculator_screen/interest_calculator_screen.dart';
 import 'package:navi_project/push_massage/notification.dart';
 import 'package:navi_project/schedule/schedulescreen.dart';
+import 'package:validators/validators.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -132,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('게시판'),
               onTap: () {
                 // 게시판으로 이동할 수 있는 로직 추가
-                Get.to(BoardScreen());
+                Get.to(PostScreen());
               },
               trailing: const Icon(Icons.navigate_next),
             ),
@@ -154,18 +159,60 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('이자계산기'),
               onTap: () {
                 // 이자계산기 화면으로 이동할 수 있는 로직 추가
-                // Get.to(InterestCalculatorScreen());
+                Get.to(InterestCalculatorScreen());
               },
               trailing: const Icon(Icons.navigate_next),
             ),
+            if (controller.isLogin)
+              ListTile(
+                leading: const Icon(Icons.settings),
+                iconColor: Colors.purple,
+                focusColor: Colors.purple,
+                title: const Text('프로필 설정'),
+                onTap: () {
+                  // 프로필 업데이트 화면으로 이동하는 로직 추가
+                  Get.offAll(() => ProfileUpdateScreen());
+                },
+                trailing: const Icon(Icons.navigate_next),
+              ),
             ListTile(
               leading: const Icon(Icons.settings),
               iconColor: Colors.purple,
               focusColor: Colors.purple,
-              title: const Text('프로필 설정'),
-              onTap: () {
-                //셋팅 화면으로 이동할 수 있는 로직 추가
-                Get.offAll(SettingScreen());
+              title: const Text('데이타 설정'),
+              onTap: () async {
+                // 프로필 업데이트 화면으로 이동하는 로직 추가
+
+                //데이타 샘플 파이어베이스에 올리기
+                Future<void> addPostToFirestore(PostModel post) async {
+                  final firestore = FirebaseFirestore.instance;
+                  await firestore.collection('posts').add(post.toMap());
+                }
+
+                DateTime now = DateTime.now();
+                DateTime oneHourAgo = now.subtract(Duration(hours: 1));
+                WidgetsFlutterBinding.ensureInitialized();
+                await Firebase.initializeApp();
+                final post = PostModel(
+                  authorNickname: controller.userData['nickName'],
+                  authorUid: controller.userUid,
+                  uid: 'WuGJ8ZToXdNd6mkRMX3Fe8UyumC2',
+                  createdAt: oneHourAgo,
+                  updatedAt: DateTime.now(),
+                  documentFileName: 'example.pdf',
+                  title: '제목2',
+                  content:
+                      '오늘은 기옥이와 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.오늘은 밥을 먹었다.',
+                  isLiked: false,
+                  likeCount: 0,
+                  photoUrls: [
+                    "https://firebasestorage.googleapis.com/v0/b/navi-e6b9b.appspot.com/o/profileImage%2FWuGJ8ZToXdNd6mkRMX3Fe8UyumC2.jpg?alt=media&token=4255e3f5-da20-42ea-86a4-72cde193d8ec",
+                    "https://firebasestorage.googleapis.com/v0/b/navi-e6b9b.appspot.com/o/profileImage%2FWuGJ8ZToXdNd6mkRMX3Fe8UyumC2.jpg?alt=media&token=4255e3f5-da20-42ea-86a4-72cde193d8ec"
+                  ], // 여기에 사진 URL 추가
+                );
+
+                await addPostToFirestore(post);
+                ShowToast('data Update 완료', 1);
               },
               trailing: const Icon(Icons.navigate_next),
             ),

@@ -21,17 +21,17 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
       body: Column(
         children: [
-          DarkSwitch(),
-          Divider(
+          const DarkSwitch(),
+          const Divider(
             thickness: 2,
             height: 0,
           ),
-          AdminModeSwitch(),
-          Divider(
+          const AdminModeSwitch(),
+          const Divider(
             thickness: 2,
             height: 0,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           TextButton(
@@ -41,9 +41,9 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Get.offAll(HomeScreen());
+              Get.offAll(const HomeScreen());
             },
-            child: Text("설정 저장하기"),
+            child: const Text("설정 저장하기"),
           ),
         ],
       ),

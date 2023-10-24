@@ -88,7 +88,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                           _getPhotoLibraryImage();
                           // 아이콘 버튼을 누를 때 수행할 작업
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.camera_alt, // 아이콘을 원하는 아이콘으로 변경
                           color: Colors.black, // 아이콘 색상 설정
                         ),
@@ -99,7 +99,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             // 회원가입 입력창
@@ -224,7 +224,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     ElevatedButton(
@@ -238,6 +238,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                             'mobilePhone': phoneNumTextController.text.trim(),
                             'photoUrl': controller.userData['photoUrl'],
                           });
+                          ShowToast('프로필이 수정되었습니다.', 1);
                         }
                         // userGetX 업데이트
                         controller.userGetX(_uid);
@@ -246,9 +247,9 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                               passwordTextController.text.trim(),
                               passwordTextController2.text.trim());
                         }
-                        Get.to(HomeScreen());
+                        Get.to(const HomeScreen());
                       },
-                      child: Text('회원정보 수정'),
+                      child: const Text('회원정보 수정'),
                     ),
                   ],
                 ),
@@ -271,7 +272,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
       setState(() {
         _pickedFile = pickedFile;
       });
-      Reference ref = storage.ref('profileImage').child('${_uid}.jpg');
+      Reference ref = storage.ref('profileImage').child('$_uid.jpg');
       TaskSnapshot uploadTask = await ref.putFile(File(_pickedFile!.path));
       controller.userData['photoUrl'] = await uploadTask.ref.getDownloadURL();
     } else {

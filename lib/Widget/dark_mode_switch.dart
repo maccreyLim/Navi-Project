@@ -22,7 +22,7 @@ class _DarkSwitchState extends State<DarkSwitch> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   '다크모드설정',
                   style: TextStyle(
                       fontSize: 30,

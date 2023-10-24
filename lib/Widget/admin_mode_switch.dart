@@ -23,7 +23,7 @@ class _AdminModeSwitchState extends State<AdminModeSwitch> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   '관리자모드 설정',
                   style: TextStyle(
                       fontSize: 30,

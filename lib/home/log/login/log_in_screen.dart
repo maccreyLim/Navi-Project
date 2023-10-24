@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     //Text 버튼
                     TextButton(
                       onPressed: () {
-                        Get.to(JoinInScreen());
+                        Get.to(const JoinInScreen());
                       },
                       child: const Text('아직 회원가입을 안하셨나요? 회원가입'),
                     ),
@@ -223,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
         //GetX Userdada 반영(GetX에서 실행)
         Get.offAll(() => const HomeScreen());
       } else {
-        Get.to(LoginScreen());
+        Get.to(const LoginScreen());
         await _auth.signOut();
         controller.loginChange();
         ShowToast('이메일을 인증해주세요', 3);

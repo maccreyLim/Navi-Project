@@ -10,7 +10,7 @@ class Announcement extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(" - 공 지 사 항 -"),
+        const Text(" - 공 지 사 항 -"),
         Expanded(
           child: ListView.builder(
             itemCount: announceList.length,
