@@ -37,7 +37,7 @@ class _LogoutScreenState extends State<LogoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[350],
+      backgroundColor: Colors.grey[100],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -74,16 +74,22 @@ class _LogoutScreenState extends State<LogoutScreen> {
                       },
                       icon: const Icon(
                         Icons.logout,
-                        size: 80,
+                        size: 60,
+                        color: Colors.redAccent,
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     const Text(
-                      '그만 놀기',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      '로그 아웃',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black54),
                     ),
                   ],
                 ),
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
                       onPressed: () {
@@ -91,14 +97,17 @@ class _LogoutScreenState extends State<LogoutScreen> {
                       },
                       icon: const Icon(
                         Icons.cancel_outlined,
-                        size: 80,
+                        size: 60,
                         color: Colors.blueAccent,
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     const Text(
-                      '좀 더 놀기',
+                      '        계속 놀기',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.blue),
+                          fontWeight: FontWeight.bold, color: Colors.black54),
                     ),
                   ],
                 ),

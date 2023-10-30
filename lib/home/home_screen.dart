@@ -21,20 +21,26 @@ import 'package:navi_project/push_massage/notification.dart';
 import 'package:navi_project/schedule/schedulescreen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+//Property
   final Query query = FirebaseFirestore.instance.collection('announcement');
+//파이어베이스 초기화
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  //GetX
   final controller = Get.put(ControllerGetX());
 
   @override
   void initState() {
+    // 초기화
     FlutterLocalNotification.init();
+
+    // 3초 후 권한 요청
     Future.delayed(const Duration(seconds: 3),
         FlutterLocalNotification.requestNotificationPermission());
     super.initState();
@@ -47,30 +53,25 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () async {
+              // 로그인 및 로그아웃 구현
               if (controller.isLogin) {
                 Get.to(LogoutScreen());
               } else {
                 Get.to(const LoginScreen());
               }
             },
-            icon: Icon(
-              controller.isLogin ? Icons.logout : Icons.login,
-            ),
+            icon: controller.isLogin
+                ? const Icon(Icons.logout)
+                : const Icon(Icons.login), // 이 위치에 아이콘 설정을 넣어야 합니다.
           ),
           IconButton(
             onPressed: () {
               Get.off(const SettingScreen());
             },
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
           ),
         ],
-        title: Text(
-          "Home Screen",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: const Text("Home Screen"),
         centerTitle: true,
       ),
       drawer: Drawer(
@@ -79,41 +80,40 @@ class _HomeScreenState extends State<HomeScreen> {
             UserAccountsDrawerHeader(
               currentAccountPicture: Obx(() {
                 final photoUrl = controller.userData['photoUrl'];
-                return CircleAvatar(
-                  backgroundImage: photoUrl != null && photoUrl.isNotEmpty
-                      ? NetworkImage(photoUrl)
-                      : AssetImage('assets/images/navi_logo_text.png'),
-                  maxRadius: 30,
-                );
+                if (photoUrl == null || photoUrl.isEmpty) {
+                  return const CircleAvatar(
+                    backgroundImage:
+                        AssetImage('assets/images/navi_logo_text.png'),
+                  );
+                } else {
+                  return CircleAvatar(
+                    backgroundImage: NetworkImage(photoUrl),
+                    maxRadius: 30,
+                  );
+                }
               }),
               accountName: Obx(() {
-                return Text(
-                  controller.userData['visitCount'] != null
-                      ? '현재상태: ${controller.userData['visitCount']}번째 로그인'
-                      : '현재상태: 로그아웃',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
+                if (controller.userData['visitCount'] == null) {
+                  return const Text('현재상태 : 로그아웃');
+                } else {
+                  return Text(
+                      '현재상태: ${controller.userData['visitCount']}번째 로그인');
+                }
               }),
               accountEmail: Obx(() {
-                return Text(
-                  controller.userData['email'] != null
-                      ? "로그인계정: ${controller.userData['email']}"
-                      : "로그인계정: 없음",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                );
+                if (controller.userData['email'] == null) {
+                  return const Text("로그인계정 : 없음");
+                } else {
+                  return Text("로그인계정: ${controller.userData['email']}");
+                }
               }),
               onDetailsPressed: () {
                 Get.to(() => const ProfileUpdateScreen());
               },
               decoration: BoxDecoration(
-                color:
-                    controller.darkModeSwitch ? Colors.grey[800] : Colors.blue,
+                color: controller.darkModeSwitch
+                    ? Colors.grey[800]
+                    : Colors.blue, // 다크 모드에 따라 컬러 변경
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(25.0),
                   bottomRight: Radius.circular(25.0),
@@ -121,186 +121,164 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text(
-                '홈',
-                style: TextStyle(fontSize: 18),
-              ),
+              leading: const Icon(Icons.home),
+              iconColor: Colors.purple,
+              focusColor: Colors.purple,
+              title: const Text('홈'),
               onTap: () {
-                // Add logic to navigate to the home screen
+                // 홈 화면으로 이동할 수 있는 로직 추가
               },
-              trailing: Icon(Icons.navigate_next),
+              trailing: const Icon(Icons.navigate_next),
             ),
             ListTile(
-              leading: Icon(Icons.door_sliding_outlined),
-              title: Text(
-                '게시판',
-                style: TextStyle(fontSize: 18),
-              ),
+              leading: const Icon(Icons.door_sliding_outlined),
+              iconColor: Colors.purple,
+              focusColor: Colors.purple,
+              title: const Text('게시판'),
               onTap: () {
-                // Add logic to navigate to the post screen
+                // 게시판으로 이동할 수 있는 로직 추가
                 Get.to(const PostScreen());
               },
-              trailing: Icon(Icons.navigate_next),
+              trailing: const Icon(Icons.navigate_next),
             ),
             ListTile(
-              leading: Icon(Icons.calendar_month),
-              title: Text(
-                'Schedule',
-                style: TextStyle(fontSize: 18),
-              ),
+              leading: const Icon(Icons.calendar_month),
+              iconColor: Colors.purple,
+              focusColor: Colors.purple,
+              title: const Text('Schedule'),
               onTap: () {
-                // Add logic to navigate to the schedule screen
+                // 스케줄 화면으로 이동할 수 있는 로직 추가
                 Get.to(const ScheduleScreen());
               },
-              trailing: Icon(Icons.navigate_next),
+              trailing: const Icon(Icons.navigate_next),
             ),
             ListTile(
-              leading: Icon(Icons.calendar_month),
-              title: Text(
-                '이자계산기',
-                style: TextStyle(fontSize: 18),
-              ),
+              leading: const Icon(Icons.calendar_month),
+              iconColor: Colors.purple,
+              focusColor: Colors.purple,
+              title: const Text('이자계산기'),
               onTap: () {
-                // Add logic to navigate to the interest calculator screen
+                // 이자계산기 화면으로 이동할 수 있는 로직 추가
                 Get.to(const InterestCalculatorScreen());
               },
-              trailing: Icon(Icons.navigate_next),
+              trailing: const Icon(Icons.navigate_next),
             ),
             if (controller.isLogin)
               ListTile(
-                leading: Icon(Icons.settings),
-                title: Text(
-                  '프로필 설정',
-                  style: TextStyle(fontSize: 18),
-                ),
+                leading: const Icon(Icons.settings),
+                iconColor: Colors.purple,
+                focusColor: Colors.purple,
+                title: const Text('프로필 설정'),
                 onTap: () {
-                  // Add logic to navigate to the profile update screen
+                  // 프로필 업데이트 화면으로 이동하는 로직 추가
                   Get.offAll(() => const ProfileUpdateScreen());
                 },
-                trailing: Icon(Icons.navigate_next),
+                trailing: const Icon(Icons.navigate_next),
               ),
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const HomeAdvertisement(),
-            SizedBox(height: 30),
-            Text(
-              " - 공 지 사 항 -",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
-            StreamBuilder<QuerySnapshot>(
-              stream: query.snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('댓글 데이터를 가져오는 중 오류가 발생했습니다.');
-                }
-
-                final querySnapshot = snapshot.data;
-                if (querySnapshot == null || querySnapshot.docs.isEmpty) {
-                  return Text('댓글이 없습니다.');
-                }
-
-                final announcementList = querySnapshot.docs
-                    .map((doc) => AnnouncetListModel.fromMap(
-                        doc.data() as Map<String, dynamic>))
-                    .toList();
-
-                return Column(
-                  children: announcementList
-                      .map((comment) => buildCommentItem(comment))
-                      .toList(),
-                );
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Get.to(AnnouncetListModelCreateScreen());
-                setState(() {});
-              },
-              child: Text(
-                '공지사항 작성',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            MaterialButton(
-              onPressed: () =>
-                  FlutterLocalNotification.showNotification("타이틀", '바디'),
-              child: Text(
-                "알림 보내기",
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildCommentItem(AnnouncetListModel comment) {
-    final now = DateTime.now();
-    final DateTime created = comment.createdAt;
-    final Duration difference = now.difference(created);
-
-    String formattedDate;
-
-    if (difference.inHours > 0) {
-      formattedDate = '${difference.inHours}시간 전';
-    } else if (difference.inMinutes > 0) {
-      formattedDate = '${difference.inMinutes}분 전';
-    } else {
-      formattedDate = '방금 전';
-    }
-
-    return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Column(
         children: [
-          Text(
-            "${comment.title} ($formattedDate)",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+          const HomeAdverticement(),
+          SizedBox(
+            height: 30,
           ),
           Text(
-            comment.content,
-            style: TextStyle(
-              fontSize: 14,
-            ),
+            " - 공 지 사 항 -",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          Visibility(
-            visible: controller.userUid == comment.authorUid,
-            child: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () async {
-                // 댓글 삭제 로직을 추가하세요.
-                String documentFileID = comment.documentFileID.toString();
-                AnnouncementFirebaseService()
-                    .deleteAnnouncetList(documentFileID);
-              },
-            ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+              child: StreamBuilder<QuerySnapshot>(
+            stream: query.snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('댓글 데이터를 가져오는 중 오류가 발생했습니다.');
+              }
+
+              final querySnapshot = snapshot.data;
+              if (querySnapshot == null || querySnapshot.docs.isEmpty) {
+                return Text('댓글이 없습니다.');
+              }
+
+              final announcementList = querySnapshot.docs
+                  .map((doc) => AnnouncetListModel.fromMap(
+                      doc.data() as Map<String, dynamic>))
+                  .toList();
+
+              return SingleChildScrollView(
+                  child: buildCommentListView(announcementList));
+            },
+          )),
+          ElevatedButton(
+            onPressed: () {
+              Get.to(AnnouncetListModelCreateScreen());
+              setState(() {});
+            },
+            child: const Text('공지사항 작성'),
+          ),
+          MaterialButton(
+            onPressed: () =>
+                FlutterLocalNotification.showNotification("타이틀", '바디'),
+            child: const Text("알림 보내기"),
           ),
         ],
+      ),
+    );
+    //DarkMode 스위치
+  }
+
+  Widget buildCommentListView(List<AnnouncetListModel> announcementList) {
+    final now = DateTime.now();
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
+      child: Container(
+        decoration: BoxDecoration(border: Border.all()),
+        child: SizedBox(
+          height: 210,
+          child: ListView.builder(
+            itemCount: announcementList.length,
+            itemBuilder: (context, index) {
+              final comment = announcementList[index];
+              final DateTime created = comment.createdAt;
+              final Duration difference = now.difference(created);
+
+              String formattedDate;
+
+              if (difference.inHours > 0) {
+                formattedDate = '${difference.inHours}시간 전';
+              } else if (difference.inMinutes > 0) {
+                formattedDate = '${difference.inMinutes}분 전';
+              } else {
+                formattedDate = '방금 전';
+              }
+
+              return ListTile(
+                title: Text("${comment.title} ($formattedDate)"),
+                subtitle: Text(comment.content),
+                trailing: Visibility(
+                  visible: controller.userUid == comment.authorUid,
+                  child: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      // 댓글 삭제 로직을 추가하세요.
+                      String documentFileID = comment.documentFileID.toString();
+
+                      AnnouncementFirebaseService()
+                          .deleteAnnouncetList(documentFileID);
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
