@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           IconButton(
             onPressed: () {
-              Get.off(const SettingScreen());
+              Get.offAll(const SettingScreen());
             },
             icon: const Icon(Icons.settings),
           ),
