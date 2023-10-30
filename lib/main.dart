@@ -4,8 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:navi_project/firebase_options.dart';
 import 'package:navi_project/home/home_screen.dart';
-import 'package:navi_project/schedule/schedulescreen.dart';
-import 'package:intl/intl.dart';
+import 'package:navi_project/home/log/login/log_in_screen.dart';
+import 'package:navi_project/home/log/logout/logout_screen.dart';
+
+import 'GetX/getx.dart';
 
 void main() async {
 // Firebase 초기화
@@ -24,17 +26,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ControllerGetX());
     return GetMaterialApp(
-      title: 'NAVI',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData.dark(),
-      home: HomeScreen(),
-      // const ScheduleScreen(),
-      // const ProfileUpdateScreen(),
-    );
+        title: 'NAVI',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData.dark(),
+        home: controller.isLogin ? HomeScreen() : LoginScreen()
+        // LogoutScreen(),
+        // const ScheduleScreen(),
+        // const ProfileUpdateScreen(),
+        );
   }
 }
 

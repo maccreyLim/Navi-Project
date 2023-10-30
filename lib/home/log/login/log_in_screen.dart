@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                '우리는 누구나 범죄자가 될수 있습니다.',
+                "우리는 누구나 범죄자가 될 수 있습니다.",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 10,

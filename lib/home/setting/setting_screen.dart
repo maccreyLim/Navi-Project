@@ -41,7 +41,9 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Get.offAll(const HomeScreen());
+              setState(() {
+                Get.offAll(const HomeScreen());
+              });
             },
             child: const Text("설정 저장하기"),
           ),

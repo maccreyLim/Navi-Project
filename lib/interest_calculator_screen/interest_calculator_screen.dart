@@ -26,7 +26,7 @@ class _InterestCalculatorScreenState extends State<InterestCalculatorScreen> {
         child: Form(
           key: _formKey,
           child: Column(
-            children: <Widget>[
+            children: [
               TextFormField(
                 controller: principalController,
                 decoration: const InputDecoration(

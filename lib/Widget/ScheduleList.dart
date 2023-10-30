@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
 import 'package:navi_project/GetX/getx.dart';
-import 'package:navi_project/Widget/schedule_firebase.dart';
-import 'package:navi_project/Widget/schedule_firebase.dart';
 import 'package:navi_project/Widget/show_toast.dart';
 import 'package:navi_project/model/schedule_model.dart';
 
@@ -14,7 +10,8 @@ class ScheduleList extends StatelessWidget {
   final DateTime selectedDay;
   final controller = Get.put(ControllerGetX());
 
-  ScheduleList({required this.scheduleStream, required this.selectedDay});
+  ScheduleList(
+      {super.key, required this.scheduleStream, required this.selectedDay});
 
   @override
   Widget build(BuildContext context) {
