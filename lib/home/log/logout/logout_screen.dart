@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
-import 'package:navi_project/home/home_screen.dart';
 import 'package:navi_project/home/log/login/log_in_screen.dart';
 
 class LogoutScreen extends StatefulWidget {

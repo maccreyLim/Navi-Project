@@ -1,24 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
 import 'package:navi_project/Widget/announcement_firebase.dart';
 import 'package:navi_project/Widget/home_advertisement.dart';
-import 'package:navi_project/Widget/show_toast.dart';
 import 'package:navi_project/home/announce_list_model_create_screen.dart';
 import 'package:navi_project/home/log/logout/logout_screen.dart';
+import 'package:navi_project/message/message_state_screen.dart';
 import 'package:navi_project/model/announcetList_model%20.dart';
 import 'package:navi_project/post/post_screen.dart';
 import 'package:navi_project/home/log/login/log_in_screen.dart';
 import 'package:navi_project/home/setting/profileupdate_screen.dart';
-
 import 'package:navi_project/home/setting/setting_screen.dart';
 import 'package:navi_project/interest_calculator_screen/interest_calculator_screen.dart';
-import 'package:navi_project/model/post_model.dart';
 import 'package:navi_project/push_massage/notification.dart';
 import 'package:navi_project/schedule/schedulescreen.dart';
+import 'package:icon_badge/icon_badge.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,18 +27,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 //Property
+// Firebase Firestore로부터 공지사항을 가져오기 위한 쿼리
   final Query query = FirebaseFirestore.instance.collection('announcement');
-//파이어베이스 초기화
+// Firebase Authentication을 사용하기 위한 인스턴스
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //GetX
+// GetX 컨트롤러 인스턴스
   final controller = Get.put(ControllerGetX());
 
   @override
   void initState() {
-    // 초기화
+// Flutter Local Notification 초기화
     FlutterLocalNotification.init();
 
-    // 3초 후 권한 요청
+// 권한 요청을 지연시킴 (3초 후)
     Future.delayed(const Duration(seconds: 3),
         FlutterLocalNotification.requestNotificationPermission());
     super.initState();
@@ -50,12 +49,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+//오른쪽 상단 로그아웃버튼 & 설정 버튼 구현
         actions: [
+          IconBadge(
+            icon: const Icon(Icons.notifications, color: Colors.lightBlue),
+            itemCount: 8, //Todo: 알림 카운트 받은메시지에서 isRead가 false인 갯수
+            badgeColor: Colors.redAccent,
+            itemColor: Colors.white,
+            maxCount: 99,
+            hideZero: true,
+            onTap: () {
+              Get.to(const MessageStateScreen());
+            },
+          ),
           IconButton(
             onPressed: () async {
               // 로그인 및 로그아웃 구현
               if (controller.isLogin) {
-                Get.to(LogoutScreen());
+                Get.to(const LogoutScreen());
               } else {
                 Get.to(const LoginScreen());
               }
@@ -72,12 +83,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         title: const Text("Home Screen"),
-        centerTitle: true,
+        centerTitle: false,
       ),
+//Drawer 메뉴 구현
       drawer: Drawer(
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
+//GetX를 이용하여 프로필 사진이 변경시 즉시 반영
               currentAccountPicture: Obx(() {
                 final photoUrl = controller.userData['photoUrl'];
                 if (photoUrl == null || photoUrl.isEmpty) {
@@ -92,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
               }),
+//GetX를 이용하여 방문수를 표시 만약 로그아웃상태일 경우 로그아웃 표시
               accountName: Obx(() {
                 if (controller.userData['visitCount'] == null) {
                   return const Text('현재상태 : 로그아웃');
@@ -100,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       '현재상태: ${controller.userData['visitCount']}번째 로그인');
                 }
               }),
+//GetX를 이용하여 로그인 계정을 표시 만약 로그아웃상태일 경우 로그인계정 없음 표시
               accountEmail: Obx(() {
                 if (controller.userData['email'] == null) {
                   return const Text("로그인계정 : 없음");
@@ -111,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Get.to(() => const ProfileUpdateScreen());
               },
               decoration: BoxDecoration(
+//다크모드 체크
                 color: controller.darkModeSwitch
                     ? Colors.grey[800]
                     : Colors.blue, // 다크 모드에 따라 컬러 변경
@@ -119,16 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   bottomRight: Radius.circular(25.0),
                 ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              iconColor: Colors.purple,
-              focusColor: Colors.purple,
-              title: const Text('홈'),
-              onTap: () {
-                // 홈 화면으로 이동할 수 있는 로직 추가
-              },
-              trailing: const Icon(Icons.navigate_next),
             ),
             ListTile(
               leading: const Icon(Icons.door_sliding_outlined),
@@ -156,72 +162,89 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.calendar_month),
               iconColor: Colors.purple,
               focusColor: Colors.purple,
-              title: const Text('이자계산기'),
+              title: const Text('출소계산기'),
               onTap: () {
                 // 이자계산기 화면으로 이동할 수 있는 로직 추가
                 Get.to(const InterestCalculatorScreen());
               },
               trailing: const Icon(Icons.navigate_next),
             ),
-            if (controller.isLogin)
-              ListTile(
-                leading: const Icon(Icons.settings),
-                iconColor: Colors.purple,
-                focusColor: Colors.purple,
-                title: const Text('프로필 설정'),
-                onTap: () {
-                  // 프로필 업데이트 화면으로 이동하는 로직 추가
-                  Get.offAll(() => const ProfileUpdateScreen());
-                },
-                trailing: const Icon(Icons.navigate_next),
-              ),
+            ListTile(
+              leading: const Icon(Icons.calendar_month),
+              iconColor: Colors.purple,
+              focusColor: Colors.purple,
+              title: const Text('회원검색'),
+              onTap: () {
+                // 회원검색으로 이동할 수 있는 로직 추가
+              },
+              trailing: const Icon(Icons.navigate_next),
+            ),
+            // if (controller.isLogin)
+            ListTile(
+              leading: const Icon(Icons.settings),
+              iconColor: Colors.purple,
+              focusColor: Colors.purple,
+              title: const Text('프로필 설정'),
+              onTap: () {
+                // 프로필 업데이트 화면으로 이동하는 로직 추가
+                Get.offAll(() => const ProfileUpdateScreen());
+              },
+              trailing: const Icon(Icons.navigate_next),
+            ),
           ],
         ),
       ),
+//Body 부분 구현
       body: Column(
         children: [
           const HomeAdverticement(),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
-          Text(
+// 공지사항 도입부분
+          const Text(
             " - 공 지 사 항 -",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
+//파이어베이스 스트림빌터 쿼리를 이용하여 공지사항 가지고 오기(추후 공지사항이 많아지면 가지고 오는 데이타양 한정 필요)
           Container(
               child: StreamBuilder<QuerySnapshot>(
             stream: query.snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Text('댓글 데이터를 가져오는 중 오류가 발생했습니다.');
+                return const Text('공지사항 데이터를 가져오는 중 오류가 발생했습니다.');
               }
 
               final querySnapshot = snapshot.data;
               if (querySnapshot == null || querySnapshot.docs.isEmpty) {
-                return Text('댓글이 없습니다.');
+                return const Text('공지사항이 없습니다.');
               }
 
               final announcementList = querySnapshot.docs
                   .map((doc) => AnnouncetListModel.fromMap(
                       doc.data() as Map<String, dynamic>))
                   .toList();
-
+              announcementList.sort(
+                  (a, b) => b.createdAt.compareTo(a.createdAt)); // 내림차순 정렬
               return SingleChildScrollView(
                   child: buildCommentListView(announcementList));
             },
           )),
+
+//공지사항 작성을 위해 필요한 버튼 ( 회원데이타에서 관리자인경우와 관리자 모드를 켰을때만 보이게 구현)
           ElevatedButton(
             onPressed: () {
-              Get.to(AnnouncetListModelCreateScreen());
+              Get.to(const AnnouncetListModelCreateScreen());
               setState(() {});
             },
             child: const Text('공지사항 작성'),
           ),
+//플러터 로컬 알림을 구현
           MaterialButton(
             onPressed: () =>
                 FlutterLocalNotification.showNotification("타이틀", '바디'),
@@ -233,6 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //DarkMode 스위치
   }
 
+//공지사항 리스트뷰빌더로 구현
   Widget buildCommentListView(List<AnnouncetListModel> announcementList) {
     final now = DateTime.now();
 
@@ -246,6 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: announcementList.length,
             itemBuilder: (context, index) {
               final comment = announcementList[index];
+//작성시간과 얼마나 지났는지 표시를 위한 함수 구현
               final DateTime created = comment.createdAt;
               final Duration difference = now.difference(created);
 
@@ -258,10 +283,18 @@ class _HomeScreenState extends State<HomeScreen> {
               } else {
                 formattedDate = '방금 전';
               }
-
+//리스트 타이틀로 구현
               return ListTile(
-                title: Text("${comment.title} ($formattedDate)"),
-                subtitle: Text(comment.content),
+                title: Text(
+                  "${comment.title} ($formattedDate)",
+                  maxLines: 1, // 최대 줄 수를 1로 설정
+                  overflow: TextOverflow.ellipsis, // 오버플로우 처리 설정 (생략 부호 사용)),
+                ),
+                subtitle: Text(
+                  comment.content,
+                  maxLines: 1, // 최대 줄 수를 1로 설정
+                  overflow: TextOverflow.ellipsis, // 오버플로우 처리 설정 (생략 부호 사용)
+                ),
                 trailing: Visibility(
                   visible: controller.userUid == comment.authorUid,
                   child: IconButton(
@@ -269,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () async {
                       // 댓글 삭제 로직을 추가하세요.
                       String documentFileID = comment.documentFileID.toString();
-
+//파이어베이스에서 공지사항 삭제 구현
                       AnnouncementFirebaseService()
                           .deleteAnnouncetList(documentFileID);
                     },

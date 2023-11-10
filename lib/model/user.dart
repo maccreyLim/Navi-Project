@@ -31,7 +31,7 @@ class UserModel {
       emailVerified: json['emailVerified'] as bool,
       admin: json['emailVerified'] as bool,
       partners: json['emailVerified'] as bool,
-      photoUrl: json['nickName'] as String,
+      photoUrl: json['photoUrl'] as String,
     );
   }
 

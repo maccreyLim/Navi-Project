@@ -62,7 +62,8 @@ class _PostScreenState extends State<PostScreen> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(); //추후수정
+                  return const Center(
+                      child: CircularProgressIndicator()); //추후수정
                 } else if (!snapshot.hasData ||
                     snapshot.data?.docs.isEmpty == true) {
                   return const Text("사용가능한 데이터가 존재하지 않습니다.");
@@ -142,7 +143,7 @@ class _PostScreenState extends State<PostScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(const BoardCreatScreen());
+          Get.to(const PostCreatScreen());
         },
         child: const Icon(Icons.add),
       ),

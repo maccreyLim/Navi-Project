@@ -9,6 +9,7 @@ class PostCommentModel {
   final bool isLiked; // 좋아요 여부
   final int likeCount; // 좋아요 갯수
   final String? documentFileID;
+  final String photoUrl;
 
   PostCommentModel({
     required this.authorUid,
@@ -19,6 +20,7 @@ class PostCommentModel {
     required this.isLiked,
     required this.likeCount,
     this.documentFileID,
+    required this.photoUrl,
   });
 
   factory PostCommentModel.fromMap(Map<String, dynamic> data) {
@@ -31,6 +33,7 @@ class PostCommentModel {
       isLiked: data['isLiked'],
       likeCount: data['likeCount'],
       documentFileID: data['documentFileID'] as String,
+      photoUrl: data['photoUrl'] as String? ?? '',
     );
   }
 
@@ -45,6 +48,7 @@ class PostCommentModel {
       isLiked: data['isLiked'],
       likeCount: data['likeCount'],
       documentFileID: data['documentFileID'] as String,
+      photoUrl: data['photoUrl'] as String? ?? '',
     );
   }
 
@@ -58,6 +62,7 @@ class PostCommentModel {
       'isLiked': isLiked,
       'likeCount': likeCount,
       'documentFileID': documentFileID,
+      'photoUrl': photoUrl,
     };
   }
 }

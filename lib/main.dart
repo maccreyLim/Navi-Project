@@ -5,7 +5,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:navi_project/firebase_options.dart';
 import 'package:navi_project/home/home_screen.dart';
 import 'package:navi_project/home/log/login/log_in_screen.dart';
-import 'package:navi_project/home/log/logout/logout_screen.dart';
 
 import 'GetX/getx.dart';
 
@@ -34,11 +33,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         darkTheme: ThemeData.dark(),
-        home: controller.isLogin ? HomeScreen() : LoginScreen()
-        // LogoutScreen(),
-        // const ScheduleScreen(),
-        // const ProfileUpdateScreen(),
-        );
+        home: controller.isLogin ? HomeScreen() : LoginScreen());
   }
 }
 

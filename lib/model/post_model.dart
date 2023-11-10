@@ -5,7 +5,7 @@ class PostModel {
   final String authorNickname; //작성자 닉네임
   final DateTime? createdAt; //작성날짜
   final DateTime? updatedAt; // 수정날짜
-  final String documentFileID; //문서파일명
+  final String? documentFileID; //문서파일명
   final String title; //제목
   final String content; //내용
   final bool isLiked; //좋아요
@@ -17,7 +17,7 @@ class PostModel {
     required this.authorNickname,
     this.createdAt,
     this.updatedAt, // Update the parameter to be nullable
-    required this.documentFileID,
+    this.documentFileID,
     required this.title,
     required this.content,
     required this.isLiked,
@@ -60,7 +60,7 @@ class PostModel {
       authorUid: data['authorUid'] as String? ?? '',
       authorNickname: authorNickname,
       createdAt: createdAt ?? DateTime.now(),
-      updatedAt: updatedAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? null,
       documentFileID: documentFileID ?? '',
       title: title ?? '',
       content: content ?? '',
