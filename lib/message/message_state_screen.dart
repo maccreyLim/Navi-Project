@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:navi_project/home/home_screen.dart';
 import 'package:navi_project/message/massage_create_screen.dart';
 import 'package:navi_project/message/received_screen.dart' as ReceivedScreen;
 import 'package:navi_project/message/send_screen.dart' as SendScreen;
@@ -30,7 +31,16 @@ class _MessageStateScreenState extends State<MessageStateScreen> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // 이 속성을 false로 설정하면 뒤로가기 버튼이 제거됩니다
         title: const Text('쪽지함'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(HomeScreen());
+            },
+            icon: Icon(Icons.home),
+          ),
+        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

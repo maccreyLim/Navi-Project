@@ -69,22 +69,17 @@ class _MessageCreateScrrenState extends State<MessageCreateScrren> {
                       final userData = searchResults[user];
 
                       final nickname = userData['nickname'] as String;
-                      final photoUrl = userData['photoUrl'];
 
                       return ListTile(
-                        title: Text(nickname),
-                        onTap: () {
-                          setState(() {
-                            sendUserController.text = nickname;
-
-                            //UID 저장
-                            receiverUid = user;
-                          });
-                        },
-                        leading: photoUrl != null
-                            ? Image.network(photoUrl)
-                            : Image.asset('assets/images/navi_logo.png'),
-                      );
+                          title: Text(nickname),
+                          onTap: () {
+                            setState(() {
+                              sendUserController.text = nickname;
+                              //UID 저장
+                              receiverUid = user;
+                            });
+                          },
+                          leading: Icon(Icons.person_add));
                     },
                   ),
                   SizedBox(

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
@@ -29,8 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
 //Property
 // Firebase Firestore로부터 공지사항을 가져오기 위한 쿼리
   final Query query = FirebaseFirestore.instance.collection('announcement');
-// Firebase Authentication을 사용하기 위한 인스턴스
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+// // Firebase Authentication을 사용하기 위한 인스턴스
+//   final FirebaseAuth _auth = FirebaseAuth.instance;
 // GetX 컨트롤러 인스턴스
   final controller = Get.put(ControllerGetX());
   int messageCount = 0; // 메시지 수를 저장할 변수 추가

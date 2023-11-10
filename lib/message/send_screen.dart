@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
-import 'package:navi_project/Widget/show_toast.dart';
 import 'package:navi_project/message/message_model.dart';
 import 'package:navi_project/message/send_message_detail.dart';
 
@@ -163,14 +162,7 @@ class _SendScreen extends State<SendScreen> {
                   message.contents,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                ), // 최대 줄 수를 3로 설정),
-                // icon: Icon(Icons.delete),
-                // trailing: IconButton(
-                //   onPressed: () async {
-                //     await _deleteMessage(message.id);
-                //     ShowToast('메시지가 삭제되었습니다.', 1);
-                // },
-
+                ),
                 onTap: () {
                   Get.to(SendMessageDetail(message: message, isSend: false));
                 },
