@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
 import 'package:navi_project/Widget/show_toast.dart';
 import 'package:navi_project/message/message_model.dart';
+import 'package:navi_project/message/receive_messager_detail.dart';
 import 'package:navi_project/push_massage/notification.dart';
 
 class ReceivedScreen extends StatefulWidget {
@@ -16,6 +17,18 @@ class ReceivedScreen extends StatefulWidget {
 class _ReceivedScreenState extends State<ReceivedScreen> {
   // Property
   final controller = Get.put(ControllerGetX());
+
+//파이어베이스 읽음 변경
+  Future<void> updateisReadMessage(Message message) async {
+    CollectionReference messagesCollection =
+        FirebaseFirestore.instance.collection('messages');
+    try {
+      await messagesCollection.doc(message.id).update({'isRead': true});
+    } catch (e) {
+      print('메시지 업데이트 오류: $e');
+      throw e; // 예외를 호출자에게 다시 던집니다.
+    }
+  }
 
 //파이어베이스 삭제
   Future<void> _deleteMessage(String messageId) async {
@@ -86,6 +99,9 @@ class _ReceivedScreenState extends State<ReceivedScreen> {
           // nickname 수정
           String senderNickname = await getSenderNickname(message.senderUid);
           message.senderNickname = senderNickname;
+          String receiverNickname =
+              await getReceiverNickname(message.senderUid);
+          message.receiverNickname = receiverNickname;
 
           messages.add(message);
         }
@@ -173,6 +189,10 @@ class _ReceivedScreenState extends State<ReceivedScreen> {
                   },
                   icon: Icon(Icons.delete),
                 ),
+                onTap: () {
+                  Get.to(ReceiveMessageDetail(message: message, isSend: false));
+                  updateisReadMessage(message);
+                },
               );
             },
           ),

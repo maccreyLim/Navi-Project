@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
 import 'package:navi_project/Widget/show_toast.dart';
 import 'package:navi_project/message/message_model.dart';
+import 'package:navi_project/message/send_message_detail.dart';
 
 class SendScreen extends StatefulWidget {
   const SendScreen({super.key});
@@ -163,13 +164,16 @@ class _SendScreen extends State<SendScreen> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ), // 최대 줄 수를 3로 설정),
-                trailing: IconButton(
-                  onPressed: () async {
-                    await _deleteMessage(message.id);
-                    ShowToast('메시지가 삭제되었습니다.', 1);
-                  },
-                  icon: Icon(Icons.delete),
-                ),
+                // icon: Icon(Icons.delete),
+                // trailing: IconButton(
+                //   onPressed: () async {
+                //     await _deleteMessage(message.id);
+                //     ShowToast('메시지가 삭제되었습니다.', 1);
+                // },
+
+                onTap: () {
+                  Get.to(SendMessageDetail(message: message, isSend: false));
+                },
               );
             },
           ),

@@ -101,15 +101,7 @@ class _MessageCreateScrrenState extends State<MessageCreateScrren> {
                       ),
                       labelText: "보낼사람",
                     ),
-                    onChanged: (query) {
-                      // 닉네임을 기반으로 수신자 UID 가져오기
-                      // messageFirebase.getUidByNickname(query).then((uid) {
-                      //   setState(() {
-                      //     receiverUid = uid ?? ''; // 결과가 없으면 빈 문자열
-                      //   });
-                      // });
-                    },
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "보낼사람을 입력해주세요";
@@ -123,7 +115,7 @@ class _MessageCreateScrrenState extends State<MessageCreateScrren> {
                   TextFormField(
                     style: TextStyle(fontSize: 16),
                     cursorHeight: 20,
-                    maxLines: 5,
+                    maxLines: 12,
                     controller: messageController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(
@@ -131,6 +123,7 @@ class _MessageCreateScrrenState extends State<MessageCreateScrren> {
                       ),
                       labelText: "메시지",
                     ),
+                    maxLength: 100,
                     keyboardType: TextInputType.multiline,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -140,21 +133,26 @@ class _MessageCreateScrrenState extends State<MessageCreateScrren> {
                     },
                   ),
                   SizedBox(
-                    height: 50,
+                    height: 25,
                   ),
                   ElevatedButton(
                     onPressed: () {
                       //  Todo: MessageFirebase에서 메시지 등록
-
-                      Message message = Message(
-                          senderUid: controller.userUid,
-                          receiverUid: receiverUid,
-                          contents: messageController.text,
-                          timestamp: DateTime.now());
-                      _mfirebase.createMessage(
-                          message, sendUserController.text);
-                      Get.off(MessageStateScreen());
+                      if (_formkey.currentState!.validate()) {
+                        Message message = Message(
+                            senderUid: controller.userUid,
+                            receiverUid: receiverUid,
+                            contents: messageController.text,
+                            timestamp: DateTime.now());
+                        _mfirebase.createMessage(
+                            message, sendUserController.text);
+                        Get.off(MessageStateScreen());
+                      }
                     },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        minimumSize:
+                            Size(MediaQuery.of(context).size.width * 1, 48)),
                     child: Text('보내기'),
                   ),
                 ],

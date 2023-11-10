@@ -33,16 +33,43 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 // GetX 컨트롤러 인스턴스
   final controller = Get.put(ControllerGetX());
+  int messageCount = 0; // 메시지 수를 저장할 변수 추가
 
   @override
   void initState() {
-// Flutter Local Notification 초기화
     FlutterLocalNotification.init();
 
-// 권한 요청을 지연시킴 (3초 후)
-    Future.delayed(const Duration(seconds: 3),
-        FlutterLocalNotification.requestNotificationPermission());
+    Future.delayed(const Duration(seconds: 3), () {
+      FlutterLocalNotification.requestNotificationPermission();
+      // 메시지 카운트 가져오기
+      if (controller.isLogin) {
+        getUnreadMessageCount().then((count) {
+          setState(() {
+            messageCount = count;
+          });
+        });
+      }
+    });
+
     super.initState();
+  }
+
+//메시지 갯수를 확인
+  Future<int> getUnreadMessageCount() async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('messages')
+          .where('isRead', isEqualTo: false)
+          .get();
+
+      return querySnapshot.size;
+    } catch (e) {
+      print('오류 발생: $e');
+      // 오류 처리 코드를 추가하거나 throw로 예외를 다시 던질 수 있습니다.
+      throw e;
+    }
   }
 
   @override
@@ -53,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconBadge(
             icon: const Icon(Icons.notifications, color: Colors.lightBlue),
-            itemCount: 8, //Todo: 알림 카운트 받은메시지에서 isRead가 false인 갯수
+            itemCount: messageCount, // itemCount를 변수로 설정
             badgeColor: Colors.redAccent,
             itemColor: Colors.white,
             maxCount: 99,
@@ -246,8 +273,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 //플러터 로컬 알림을 구현
           MaterialButton(
-            onPressed: () =>
-                FlutterLocalNotification.showNotification("타이틀", '바디'),
+            onPressed: () => FlutterLocalNotification.showNotification(
+                "새로운 메시지가 도책했습니다.", '총 ${messageCount}개의 메지시를 확인하세요'),
             child: const Text("알림 보내기"),
           ),
         ],
@@ -314,5 +341,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void showLocalNotification(String title, String body) {
+    FlutterLocalNotification.showNotification(title, title);
   }
 }
