@@ -5,7 +5,7 @@ class ControllerGetX extends GetxController {
   //Property
   RxInt messageCount = 0.obs;
   bool darkModeSwitch = false; //Dark테마를 위한 스위치 설정
-  bool adminModeSwich = false; //관리자모드를 위한 스위치 설정
+  RxBool adminModeSwich = false.obs; //관리자모드를 위한 스위치 설정
   bool isLogin = false; //로그인 상태 확인
   bool isInput = false; // E-Mail 검증 완료여부
   String userUid = ''; //Login한 Use의 Uid저장
@@ -54,14 +54,10 @@ class ControllerGetX extends GetxController {
     userUid = uid;
   }
 
-  // // 방문 횟수 업데이트 메서드
-  // void updateVisitCount(int newVisitCount) {
-  //   visitCount = newVisitCount;
-  // }
-
 //Login 및 로그아웃 변경을 위한 스위칭
   void loginChange() {
     isLogin = !isLogin;
+
     update();
   }
 

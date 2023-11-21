@@ -13,50 +13,54 @@ class _DarkSwitchState extends State<DarkSwitch> {
   final controller = Get.put(ControllerGetX());
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '다크모드설정',
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-                Column(
-                  children: [
-                    Switch(
-                        value: controller.darkModeSwitch,
-                        onChanged: (value) {
-                          setState(() {
-                            controller.darkModeSwitch = value;
-                            Get.changeTheme(controller.darkModeSwitch
-                                ? ThemeData.dark()
-                                : ThemeData.light());
-                          });
-                        }),
-                    Text(
-                      controller.darkModeSwitch ? "Dark Mode" : "Light Mode",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: controller.darkModeSwitch
-                              ? Colors.white
-                              : Colors.black),
-                    ),
-                  ],
-                ),
-              ],
+    return Container(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Switch(
+                                value: controller.darkModeSwitch,
+                                onChanged: (value) {
+                                  setState(() {
+                                    controller.darkModeSwitch = value;
+                                    Get.changeTheme(controller.darkModeSwitch
+                                        ? ThemeData.dark()
+                                        : ThemeData.light());
+                                  });
+                                }),
+                            Text(
+                              controller.darkModeSwitch
+                                  ? "Dark Mode"
+                                  : "Light Mode",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: controller.darkModeSwitch
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           // 폼의 모든 유효성 검사가 통과됐을 때 실행될 코드
-                          await signIn(
+                          await LogIn(
                             emailTextController.text.trim(),
                             passwordTextController.text.trim(),
                           );
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<UserCredential?> signIn(String email, String password) async {
+  Future<UserCredential?> LogIn(String email, String password) async {
     try {
       final userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -205,8 +205,6 @@ class _LoginScreenState extends State<LoginScreen> {
         Map<String, dynamic> dataToUpdate = {
           'visitCount': newVisitCount,
           'emailVerified': true,
-          'admin': false,
-          'parters': false,
         };
 
         // 문서를 업데이트합니다.

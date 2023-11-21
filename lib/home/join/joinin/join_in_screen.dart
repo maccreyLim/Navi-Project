@@ -263,6 +263,8 @@ class _JoinInScreenState extends State<JoinInScreen> {
                 admin: false,
                 partners: false,
                 photoUrl: "",
+                workplace: "",
+                point: 0,
               ).toJson(),
             );
 

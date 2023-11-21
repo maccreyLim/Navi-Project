@@ -36,7 +36,7 @@ class _MessageCreateScrrenState extends State<MessageCreateScrren> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('쪽지 보내기'),
+          title: const Text('쪽지 보내기'),
         ),
         body: SingleChildScrollView(
           child: Form(

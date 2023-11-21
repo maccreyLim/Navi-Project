@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
 import 'package:navi_project/Widget/announcement_firebase.dart';
+import 'package:navi_project/Widget/dark_mode_switch.dart';
 import 'package:navi_project/Widget/home_advertisement.dart';
-import 'package:navi_project/home/announce_list_model_create_screen.dart';
 import 'package:navi_project/home/log/logout/logout_screen.dart';
+import 'package:navi_project/home/menberseach/member_seach.dart';
 import 'package:navi_project/message/message_state_screen.dart';
 import 'package:navi_project/model/announcetList_model%20.dart';
 import 'package:navi_project/post/post_screen.dart';
@@ -27,31 +28,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 //Property
+// GetX 컨트롤러 인스턴스
+  final controller = Get.put(ControllerGetX());
 // Firebase Firestore로부터 공지사항을 가져오기 위한 쿼리
   final Query query = FirebaseFirestore.instance.collection('announcement');
 // // Firebase Authentication을 사용하기 위한 인스턴스
 //   final FirebaseAuth _auth = FirebaseAuth.instance;
-// GetX 컨트롤러 인스턴스
-  final controller = Get.put(ControllerGetX());
-
-  @override
-  void initState() {
-    FlutterLocalNotification.init();
-
-    Future.delayed(const Duration(seconds: 3), () async {
-      FlutterLocalNotification.requestNotificationPermission();
-      // 메시지 카운트 가져오기
-      if (controller.isLogin) {
-        await for (int count in getUnreadMessageCountStream()) {
-          setState(() {
-            controller.setMessageCount(count);
-          });
-        }
-      }
-    });
-
-    super.initState();
-  }
 
 //메시지 갯수를 스트림으로 확인
   Stream<int> getUnreadMessageCountStream() {
@@ -61,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Stream<QuerySnapshot> snapshots = _firestore
           .collection('messages')
           .where('isRead', isEqualTo: false)
+          .where('receiverUid', isEqualTo: controller.userUid)
           .snapshots();
 
       return snapshots.map((QuerySnapshot querySnapshot) {
@@ -71,6 +54,27 @@ class _HomeScreenState extends State<HomeScreen> {
       // 오류 처리 코드를 추가하거나 throw로 예외를 다시 던질 수 있습니다.
       throw e;
     }
+  }
+
+  @override
+  void initState() {
+    FlutterLocalNotification.init();
+
+    Future.delayed(const Duration(seconds: 3), () async {
+      FlutterLocalNotification.requestNotificationPermission();
+      // 메시지 카운트 가져오기
+      if (controller.isLogin) {
+        await for (int count in getUnreadMessageCountStream()) {
+          if (mounted) {
+            setState(() {
+              controller.setMessageCount(count);
+            });
+          }
+        }
+      }
+    });
+
+    super.initState();
   }
 
   @override
@@ -103,12 +107,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? const Icon(Icons.logout)
                 : const Icon(Icons.login), // 이 위치에 아이콘 설정을 넣어야 합니다.
           ),
-          IconButton(
-            onPressed: () {
-              Get.offAll(const SettingScreen());
-            },
-            icon: const Icon(Icons.settings),
-          ),
+          controller.userData['admin'] == true
+              ? IconButton(
+                  onPressed: () {
+                    Get.offAll(const SettingScreen());
+                  },
+                  icon: const Icon(Icons.settings),
+                )
+              : Container(),
         ],
         title: const Text("Home Screen"),
         centerTitle: false,
@@ -187,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
               trailing: const Icon(Icons.navigate_next),
             ),
             ListTile(
-              leading: const Icon(Icons.calendar_month),
+              leading: const Icon(Icons.calculate),
               iconColor: Colors.purple,
               focusColor: Colors.purple,
               title: const Text('출소일 계산기'),
@@ -198,12 +204,13 @@ class _HomeScreenState extends State<HomeScreen> {
               trailing: const Icon(Icons.navigate_next),
             ),
             ListTile(
-              leading: const Icon(Icons.calendar_month),
+              leading: const Icon(Icons.search),
               iconColor: Colors.purple,
               focusColor: Colors.purple,
               title: const Text('회원검색'),
               onTap: () {
                 // 회원검색으로 이동할 수 있는 로직 추가
+                Get.to(const MemberSeach());
               },
               trailing: const Icon(Icons.navigate_next),
             ),
@@ -219,6 +226,15 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               trailing: const Icon(Icons.navigate_next),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.25,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(child: const DarkSwitch()),
+              ],
+            ),
           ],
         ),
       ),
@@ -229,6 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 30,
           ),
+
 // 공지사항 도입부분
           const Text(
             " - 공 지 사 항 -",
@@ -263,26 +280,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: buildCommentListView(announcementList));
             },
           )),
-
-//공지사항 작성을 위해 필요한 버튼 ( 회원데이타에서 관리자인경우와 관리자 모드를 켰을때만 보이게 구현)
-          ElevatedButton(
-            onPressed: () {
-              Get.to(const AnnouncetListModelCreateScreen());
-              setState(() {});
-            },
-            child: const Text('공지사항 작성'),
-          ),
-//플러터 로컬 알림을 구현
-          MaterialButton(
-            onPressed: () => FlutterLocalNotification.showNotification(
-                "새로운 메시지가 도책했습니다.",
-                '총 ${controller.messageCount}개의 메지시를 확인하세요'),
-            child: const Text("알림 보내기"),
-          ),
         ],
       ),
     );
+
     //DarkMode 스위치
+  }
+
+  Widget NotificationMessage() {
+    return FutureBuilder<void>(
+      future: FlutterLocalNotification.showNotification(
+        "새로운 메시지가 도착했습니다.",
+        '총 ${controller.messageCount}개의 메시지를 확인하세요',
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          // Return your widget after the asynchronous operation is completed
+          return Column(
+            children: [
+              const Text("알림 보내기"),
+            ],
+          );
+        } else {
+          // Return a placeholder or loading indicator while waiting for the result
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 
 //공지사항 리스트뷰빌더로 구현

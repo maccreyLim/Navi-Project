@@ -13,7 +13,7 @@ import 'dart:io';
 import 'package:uuid/uuid.dart';
 
 class PostCreatScreen extends StatefulWidget {
-  const PostCreatScreen({Key? key});
+  const PostCreatScreen({Key? key}) : super(key: key);
 
   @override
   State<PostCreatScreen> createState() => _PostCreatScreenState();
@@ -194,14 +194,14 @@ class _PostCreatScreenState extends State<PostCreatScreen> {
                           createdAt: DateTime.now(),
                           updatedAt: null,
                           photoUrls: imageUrls.isNotEmpty ? imageUrls : [],
-                          documentFileID: documentFileID!,
+                          documentFileID: documentFileID,
                         );
 
                         await PostFirebaseService()
                             .createPost(post, documentFileID);
 
                         ShowToast('게시물이 성공적으로 저장되었습니다.', 1);
-                        Get.off(PostScreen());
+                        Get.off(const PostScreen());
                       }
                     },
                     child: const Text('저장'),

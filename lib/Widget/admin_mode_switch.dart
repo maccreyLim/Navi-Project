@@ -17,41 +17,40 @@ class _AdminModeSwitchState extends State<AdminModeSwitch> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '관리자모드 설정',
-                  style: TextStyle(
-                      fontSize: 30,
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            children: [
+              const Text(
+                '관리자모드 설정',
+                style: TextStyle(fontSize: 14, color: Colors.black),
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Obx(() => Switch(
+                          value: controller.adminModeSwich.value,
+                          onChanged: (value) {
+                            controller.adminModeSwich.value = value;
+                            setState(() {});
+                          },
+                        )),
+                  ),
+                  Text(
+                    controller.adminModeSwich.value
+                        ? "Admin Mode"
+                        : "Normal Mode",
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-                Column(
-                  children: [
-                    Switch(
-                        value: controller.adminModeSwich,
-                        onChanged: (value) {
-                          setState(() {
-                            controller.adminModeSwich = value;
-                          });
-                        }),
-                    Text(
-                      controller.adminModeSwich ? "Admin Mode" : "Normal Mode",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: controller.adminModeSwich
-                              ? Colors.redAccent
-                              : Colors.grey),
+                      fontSize: 14,
+                      color: controller.adminModeSwich.value
+                          ? Colors.redAccent
+                          : Colors.grey,
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ],

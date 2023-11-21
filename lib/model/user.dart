@@ -8,18 +8,21 @@ class UserModel {
   final bool admin;
   final bool partners;
   final String? photoUrl;
+  final String? workplace;
+  final int? point;
 
-  UserModel({
-    required this.email,
-    required this.mobilePhone,
-    required this.nickName,
-    required this.uid,
-    required this.visitCount,
-    required this.emailVerified,
-    required this.admin,
-    required this.partners,
-    required this.photoUrl,
-  });
+  UserModel(
+      {required this.email,
+      required this.mobilePhone,
+      required this.nickName,
+      required this.uid,
+      required this.visitCount,
+      required this.emailVerified,
+      required this.admin,
+      required this.partners,
+      required this.photoUrl,
+      required this.workplace,
+      required this.point});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
@@ -32,6 +35,8 @@ class UserModel {
       admin: json['emailVerified'] as bool,
       partners: json['emailVerified'] as bool,
       photoUrl: json['photoUrl'] as String,
+      workplace: json['workplace'] as String,
+      point: json['point'] as int,
     );
   }
 
@@ -46,6 +51,8 @@ class UserModel {
       'admin': false,
       'parters': false,
       'photoUrl': photoUrl,
+      'workspace': "",
+      'point': 0
     };
   }
 }

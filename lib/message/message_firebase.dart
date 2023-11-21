@@ -43,17 +43,6 @@ class MassageFirebase {
     }
   }
 
-  // Stream<List<Message>> getMessagesStream(String receiverUid) {
-  //   return messagesCollection
-  //       .where('receiverUid', isEqualTo: receiverUid)
-  //       .orderBy('timestamp', descending: true)
-  //       .snapshots()
-  //       .map((querySnapshot) {
-  //     return querySnapshot.docs
-  //         .map((doc) => Message.fromMap(doc.data() as Map<String, dynamic>))
-  //         .toList();
-  //   });
-
 // Stream Read(실시간)
   Stream<List<Message>> getMessagesStream(String receiverUid) {
     try {
@@ -117,14 +106,19 @@ class MassageFirebase {
         final userDataFromDoc = document.data() as Map<String, dynamic>;
         final uid = userDataFromDoc['uid'];
         final nickname = userDataFromDoc['nickName'];
-
+        final occupation = userDataFromDoc['occupation'];
+        final workspace = userDataFromDoc['workspace'];
         final photoUrl = userDataFromDoc['photoUrl'];
+        final parters = userDataFromDoc['parters'];
 
         if (uid != null && nickname != null) {
           userData[uid] = {
             'nickname': nickname,
             'photoUrl': photoUrl,
             'uid': uid,
+            'occupation': occupation,
+            'workspace': workspace,
+            'parters': parters,
           };
         }
       }
@@ -136,30 +130,3 @@ class MassageFirebase {
     }
   }
 }
-
-
-
-
-
-// 위의 Stream을 사용하는 예제
-// StreamBuilder<List<Message>>(
-//   stream: getMessagesStream(receiverUid),
-//   builder: (context, snapshot) {
-//     if (snapshot.hasError) {
-//       return Text('메시지 가져오기 오류: ${snapshot.error}');
-//     }
-
-//     if (snapshot.connectionState == ConnectionState.waiting) {
-//       return CircularProgressIndicator(); // 데이터가 로드 중일 때 로딩 표시
-//     }
-
-//     if (!snapshot.hasData || snapshot.data.isEmpty) {
-//       return Text('메시지가 없습니다.');
-//     }
-
-//     // 실시간으로 업데이트된 메시지 목록을 사용해 UI를 업데이트
-//     List<Message> messages = snapshot.data;
-
-//     // messages를 표시하거나 다른 작업 수행
-//   },
-// )
