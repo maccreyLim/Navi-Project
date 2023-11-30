@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
-import 'package:navi_project/Widget/announcement_firebase.dart';
 import 'package:navi_project/Widget/dark_mode_switch.dart';
 import 'package:navi_project/Widget/home_advertisement.dart';
+import 'package:navi_project/home/announce/announce_detail_screen.dart';
 import 'package:navi_project/home/log/logout/logout_screen.dart';
 import 'package:navi_project/home/menberseach/member_seach.dart';
 import 'package:navi_project/message/message_state_screen.dart';
@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
               focusColor: Colors.purple,
               title: const Text('출소일 계산기'),
               onTap: () {
-                // 이자계산기 화면으로 이동할 수 있는 로직 추가
+// 이자계산기 화면으로 이동할 수 있는 로직 추가
                 Get.to(const ReleaseCalculatorScreen());
               },
               trailing: const Icon(Icons.navigate_next),
@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
               focusColor: Colors.purple,
               title: const Text('회원검색'),
               onTap: () {
-                // 회원검색으로 이동할 수 있는 로직 추가
+// 회원검색으로 이동할 수 있는 로직 추가
                 Get.to(const MemberSeach());
               },
               trailing: const Icon(Icons.navigate_next),
@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
               focusColor: Colors.purple,
               title: const Text('프로필 설정'),
               onTap: () {
-                // 프로필 업데이트 화면으로 이동하는 로직 추가
+// 프로필 업데이트 화면으로 이동하는 로직 추가
                 Get.offAll(() => const ProfileUpdateScreen());
               },
               trailing: const Icon(Icons.navigate_next),
@@ -229,10 +229,10 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.25,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SizedBox(child: const DarkSwitch()),
+                SizedBox(child: DarkSwitch()),
               ],
             ),
           ],
@@ -243,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           const HomeAdverticement(),
           const SizedBox(
-            height: 30,
+            height: 40,
           ),
 
 // 공지사항 도입부분
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //DarkMode 스위치
   }
 
-  Widget NotificationMessage() {
+  Widget notificationMessage() {
     return FutureBuilder<void>(
       future: FlutterLocalNotification.showNotification(
         "새로운 메시지가 도착했습니다.",
@@ -296,9 +296,9 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           // Return your widget after the asynchronous operation is completed
-          return Column(
+          return const Column(
             children: [
-              const Text("알림 보내기"),
+              Text("알림 보내기"),
             ],
           );
         } else {
@@ -318,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         decoration: BoxDecoration(border: Border.all()),
         child: SizedBox(
-          height: 210,
+          height: 280,
           child: ListView.builder(
             itemCount: announcementList.length,
             itemBuilder: (context, index) {
@@ -338,6 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
 //리스트 타이틀로 구현
               return ListTile(
+                leading: Icon(Icons.circle, size: 14, color: Colors.grey),
                 title: Text(
                   "${comment.title} ($formattedDate)",
                   maxLines: 1, // 최대 줄 수를 1로 설정
@@ -348,19 +349,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   maxLines: 1, // 최대 줄 수를 1로 설정
                   overflow: TextOverflow.ellipsis, // 오버플로우 처리 설정 (생략 부호 사용)
                 ),
-                trailing: Visibility(
-                  visible: controller.userUid == comment.authorUid,
-                  child: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () async {
-                      // 댓글 삭제 로직을 추가하세요.
-                      String documentFileID = comment.documentFileID.toString();
-//파이어베이스에서 공지사항 삭제 구현
-                      AnnouncementFirebaseService()
-                          .deleteAnnouncetList(documentFileID);
-                    },
-                  ),
-                ),
+//                 trailing: Visibility(
+//                   visible: controller.userUid == comment.authorUid,
+//                   child: IconButton(
+//                     icon: const Icon(Icons.delete),
+//                     onPressed: () async {
+// // 댓글 삭제 로직을 추가하세요.
+//                       String documentFileID = comment.documentFileID.toString();
+// //파이어베이스에서 공지사항 삭제 구현
+//                       AnnouncementFirebaseService()
+//                           .deleteAnnouncetList(documentFileID);
+//                     },
+//                   ),
+//                 ),
+                onTap: () {
+                  Get.to(() => AnnounceDetailScreen(), arguments: comment);
+                },
               );
             },
           ),

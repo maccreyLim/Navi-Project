@@ -9,8 +9,6 @@ import 'package:navi_project/model/post_comment_model.dart';
 import 'package:navi_project/model/post_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-import 'package:navi_project/post/post_update_scrren.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final PostModel post;

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
 import 'package:navi_project/Widget/admin_mode_switch.dart';
 import 'package:navi_project/Widget/dark_mode_switch.dart';
-import 'package:navi_project/home/announce_list_model_create_screen.dart';
+import 'package:navi_project/home/announce/announce_list_model_create_screen.dart';
 import 'package:navi_project/home/home_screen.dart';
 
 class SettingScreen extends StatefulWidget {

@@ -90,7 +90,7 @@ class __MemberMessageCreateScrrenState
                             return null;
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 120,
                         ),
                         ElevatedButton(
@@ -113,7 +113,7 @@ class __MemberMessageCreateScrrenState
                                   MediaQuery.of(context).size.width * 1, 48)),
                           child: Text(
                             '$receivernickName 님에게 쪽지 보내기',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w500),
                           ),
                         ),

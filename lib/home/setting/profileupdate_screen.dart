@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:navi_project/GetX/getx.dart';
@@ -85,8 +86,10 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                       right: 0, // 이미지에서 오른쪽으로 20 픽셀 떨어진 위치
                       child: IconButton(
                         onPressed: () async {
-                          _getPhotoLibraryImage();
                           // 아이콘 버튼을 누를 때 수행할 작업
+                          setState(() {
+                            _getPhotoLibraryImage();
+                          });
                         },
                         icon: const Icon(
                           Icons.camera_alt, // 아이콘을 원하는 아이콘으로 변경
@@ -269,9 +272,14 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
+      // 이미지를 압축
+      File compressedFile = await compressAndGetFile(File(pickedFile.path));
+
       setState(() {
-        _pickedFile = pickedFile;
+        // XFile을 그대로 사용합니다.
+        _pickedFile = XFile(compressedFile.path);
       });
+
       Reference ref = storage.ref('profileImage').child('$_uid.jpg');
       TaskSnapshot uploadTask = await ref.putFile(File(_pickedFile!.path));
       controller.userData['photoUrl'] = await uploadTask.ref.getDownloadURL();
@@ -280,6 +288,22 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
         ShowToast('이미지를 선택해주세요', 1);
       }
     }
+  }
+
+  Future<File> compressAndGetFile(File file) async {
+    // 압축 품질 설정 (0에서 100까지)
+    int quality = 80;
+
+    List<int> compressedBytes = await FlutterImageCompress.compressWithList(
+      file.readAsBytesSync(),
+      quality: quality,
+    );
+
+    // 압축된 바이트를 새 파일에 저장
+    File compressedFile = File('${file.path}_compressed.jpg')
+      ..writeAsBytesSync(compressedBytes);
+
+    return compressedFile;
   }
 
   Future<void> changePassword(

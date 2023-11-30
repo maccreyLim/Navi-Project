@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navi_project/GetX/getx.dart';
 import 'package:navi_project/home/menberseach/member_messge_create_screen.dart';
-import 'package:navi_project/message/massage_create_screen.dart';
 import 'package:navi_project/message/message_firebase.dart';
 
 class MemberSeach extends StatefulWidget {
@@ -86,7 +85,7 @@ class _MemberSeachState extends State<MemberSeach> {
                                   backgroundColor: Colors.green[100],
                                   title: Text(
                                     "$nickname",
-                                    style: TextStyle(color: Colors.black),
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                   content: Row(
                                     children: [
@@ -106,7 +105,7 @@ class _MemberSeachState extends State<MemberSeach> {
                                                   'assets/images/navi_logo_text.png',
                                                   fit: BoxFit.cover),
                                             ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 20,
                                       ),
                                       Container(
@@ -122,20 +121,20 @@ class _MemberSeachState extends State<MemberSeach> {
                                                 children: [
                                                   Text(
                                                     '${userData['workspace'].toString()}',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 14,
                                                         color: Colors.black),
                                                   ),
                                                   Text(
                                                     '${userData['occupation'].toString()}',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 14,
                                                         color: Colors.black),
                                                   ),
                                                 ],
                                               )
                                             else
-                                              Text('일반회원'),
+                                              const Text('일반회원'),
                                           ],
                                         ),
                                       ),
@@ -150,7 +149,8 @@ class _MemberSeachState extends State<MemberSeach> {
                                             nickName: nickname,
                                           ));
                                         },
-                                        icon: Icon(Icons.message_outlined),
+                                        icon:
+                                            const Icon(Icons.message_outlined),
                                         color: Colors.grey,
                                       ),
                                     ),
@@ -159,7 +159,7 @@ class _MemberSeachState extends State<MemberSeach> {
                                         onPressed: () {
                                           Navigator.of(context).pop(); //창 닫기
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.close,
                                           color: Colors.black,
                                         ),
@@ -171,13 +171,13 @@ class _MemberSeachState extends State<MemberSeach> {
                             );
                           });
                         },
-                        leading: Icon(Icons.person_add));
+                        leading: const Icon(Icons.person_add));
                   },
                 ),
                 const SizedBox(
                   height: 30,
                 ),
-                Text(controller.userData.string),
+                // Text(controller.userData.string),
               ],
             ),
           ),

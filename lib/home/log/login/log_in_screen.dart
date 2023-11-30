@@ -153,23 +153,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 )),
             //구글 로그인 버튼
             GestureDetector(
-                onTap: () {
-                  print("google tap");
+              onTap: () {
+                print("google tap");
 
-                  // AuthService.instance.signInWithGoogle();
-                },
-                child: SizedBox(
-                  width: 300,
-                  child: controller.darkModeSwitch
-                      ? Image.asset(
-                          "assets/images/btn_google_signin_dark_normal_web.png",
-                          width: double.infinity,
-                        )
-                      : Image.asset(
-                          "assets/images/btn_google_signin_light_focus_web.png",
-                          width: double.infinity,
-                        ),
-                )),
+                // AuthService.instance.signInWithGoogle();
+              },
+              child: SizedBox(
+                width: 300,
+                // child: controller.darkModeSwitch
+                //     ? Image.asset(
+                //         "assets/images/btn_google_signin_dark_normal_web.png",
+                //         width: double.infinity,
+                //       )
+                //     : Image.asset(
+                //         "assets/images/btn_google_signin_light_focus_web.png",
+                //         width: double.infinity,
+                //       ),
+              ),
+            ),
             //           ElevatedButton(
             //             onPressed: () {
             //           //     AuthService().signInWithGoogle();

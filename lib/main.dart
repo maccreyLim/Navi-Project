@@ -5,7 +5,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:navi_project/firebase_options.dart';
 import 'package:navi_project/home/home_screen.dart';
 import 'package:navi_project/home/log/login/log_in_screen.dart';
-
 import 'GetX/getx.dart';
 
 void main() async {
